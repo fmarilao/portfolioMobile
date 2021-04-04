@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Button, Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Button, Dimensions, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 
 export default function App() {
@@ -8,11 +8,12 @@ export default function App() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('https://gitconnected.com/v1/portfolio/fmarilao')
+    fetch('http://fmarilao.tech/resumeData.json')
       .then(response => response.json())
       .then(data => {
         setInfo(data)
         setLoading(false)
+        console.log(data.portfolio.projects)
       })
     // eslint-disable-next-line
   }, []);
@@ -21,22 +22,34 @@ export default function App() {
     return <View><Text>Cargando...</Text></View>
   }
 
+  const projects = () => {
+    return info.portfolio.projects.map((element, i) => {
+      return(
+      <View key={element.i}>
+        <Text style={styles.text}>{element.title}</Text>
+        <Text style={styles.text}>{element.url}</Text>
+      </View>
+      )
+      })
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView>
-      <Text style={styles.text}>{info.basics.name}</Text>
-      <Text style={styles.text}>{info.basics.label}</Text>
+      <Text style={styles.text}>{info.main.name}</Text>
+      <Text style={styles.text}>{info.main.description}</Text>
       <Button title="LinkedIn"></Button>
       <Button title="Github"></Button>
-      <Text style={styles.text}>{info.basics.summary}</Text>
-      <Text style={styles.titles}>Contact Details</Text>
-      <Text style={styles.text}>🇦🇷 GMT -3</Text>
-      <Text style={styles.text}>{info.basics.region}</Text>
-      <Text style={styles.text}>{info.basics.phone}</Text>
-      <Text style={styles.text}>{info.basics.email}</Text>
+      <Text style={styles.text}>{info.main.bio}</Text>
+      <Text style={styles.titles}>{info.main.contactmessage}</Text>
+      <Text style={styles.text}>🇦🇷 {info.main.address.street}</Text>
+      <Text style={styles.text}>{info.main.address.city}</Text>
+      <Text style={styles.text}>{info.main.phone}</Text>
+      <Text style={styles.text}>{info.main.email}</Text>
       <Button title="English Resume"></Button>
       <Button title="Spanish Resume"></Button>
       <Text style={styles.titles}>Latest Projects</Text>
+      <View>{projects()}</View>
       </ScrollView>
       <StatusBar style="auto" />
     </View>

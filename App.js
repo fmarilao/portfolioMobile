@@ -1,12 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { Button, SocialIcon } from 'react-native-elements';
-import { Dimensions, Linking, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
-
+import { Dimensions, TextInput, Linking, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
+import { useFormik } from 'formik'
 
 export default function App() {
   const [info, setInfo] = useState({})
   const [loading, setLoading] = useState(true)
+
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      email: '',
+      message: '',
+    },
+    onSubmit: x => console.warn(x)
+  })
 
   useEffect(() => {
     fetch('http://fmarilao.tech/resumeData.json')
@@ -133,6 +142,29 @@ export default function App() {
       <Text style={styles.titles}>Work</Text>
       <View style={styles.container}>{work()}</View>
 
+      <Text style={styles.titles}>Get in touch</Text>
+      <View style={styles.container}>
+        <Text style={styles.subTitles}>Your name</Text>
+        <TextInput
+          onChangeText={formik.handleChange('name')} 
+          value={formik.values.name}
+          style={styles.input}
+          />
+        <Text style={styles.subTitles}>Your email</Text>
+        <TextInput
+          onChangeText={formik.handleChange('email')} 
+          value={formik.values.email}
+          style={styles.input}
+          />
+        <Text style={styles.subTitles}>Your message</Text>
+        <TextInput
+          onChangeText={formik.handleChange('message')} 
+          value={formik.values.message}
+          style={styles.input}
+          />
+        <Button title="Send" onPress={formik.handleSubmit}></Button>
+        </View>
+
       </ScrollView>
     </View>
   );
@@ -192,6 +224,13 @@ const styles = StyleSheet.create({
     fontSize: 15,
     flex: 1,
     padding: 10,
+  },
+  input: {
+    height: 40,
+    width: '80%',
+    margin: 10,
+    borderWidth: 1,
+    borderColor: '#fff'
   },
   scrollView: {
     width: Dimensions.get('window').width

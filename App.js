@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, SocialIcon } from 'react-native-elements';
-import { Alert, Dimensions, TextInput, Linking, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
+import { StatusBar, Alert, Dimensions, TextInput, Linking, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
 import { Formik } from 'formik'
 import * as yup from 'yup'
 
@@ -87,6 +87,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <StatusBar />
       <ScrollView>
       <Text style={styles.titles}>{info.main.name}</Text>
       <Text style={styles.subTitles}>{info.main.description}</Text>

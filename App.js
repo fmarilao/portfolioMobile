@@ -1,8 +1,7 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { Button, SocialIcon } from 'react-native-elements';
 import { Alert, Dimensions, TextInput, Linking, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
-import { Formik, useFormik } from 'formik'
+import { Formik } from 'formik'
 import * as yup from 'yup'
 
 export default function App() {
@@ -16,7 +15,6 @@ export default function App() {
         setInfo(data)
         setLoading(false)
       })
-    // eslint-disable-next-line
   }, []);
 
   if(loading){
@@ -26,7 +24,6 @@ export default function App() {
   const loadInBrowser = (url) => {
     Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
   };
-
 
   const projects = () => {
     return info.portfolio.projects.map((element, i) => {
@@ -66,10 +63,10 @@ export default function App() {
     return info.resume.education.map((element, i) => {
       return(
         <View key={i} style={styles.box}>
-          <Text style={styles.subTitles}>{element.school}</Text>
-          <Text style={styles.text}>{element.degree}</Text>
-          <Text style={styles.text}>{element.graduated}</Text>
-          <Text style={styles.text}>{element.description}</Text>
+          <Text style={styles.boxTitle}>{element.school}</Text>
+          <Text style={styles.boxSubTitle}>{element.degree}</Text>
+          <Text style={styles.boxSubTitle}>{element.graduated}</Text>
+          <Text style={styles.boxText}>{element.description}</Text>
         </View>
         )
     })
@@ -79,10 +76,10 @@ export default function App() {
     return info.resume.work.map((element, i) => {
       return(
         <View key={i} style={styles.box}>
-          <Text style={styles.subTitles}>{element.company}</Text>
-          <Text style={styles.text}>{element.title}</Text>
-          <Text style={styles.text}>{element.years}</Text>
-          <Text style={styles.text}>{element.description}</Text>
+          <Text style={styles.boxTitle}>{element.company}</Text>
+          <Text style={styles.boxSubTitle}>{element.title}</Text>
+          <Text style={styles.boxSubTitle}>{element.years}</Text>
+          <Text style={styles.boxText}>{element.description}</Text>
         </View>
         )
     })
@@ -118,7 +115,6 @@ export default function App() {
       <Button title="English Resume" onPress={() => loadInBrowser(info.main.resumedownload)}></Button>
       <Button title="Spanish Resume" onPress={() => loadInBrowser(info.main.resumeSpanishdownload)}></Button>
       </View>
-
 
       <Text style={styles.titles}>Latest Projects</Text>
       <View style={styles.container}>{projects()}</View>
@@ -212,21 +208,6 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  inputStyle: {
-    borderWidth: 1,
-    color: '#fff',
-    borderColor: '#4e4e4e',
-    padding: 12,
-    marginBottom: 15,
-  },
-  inputMsg: {
-    borderWidth: 1,
-    color: '#fff',
-    borderColor: '#4e4e4e',
-    padding: 12,
-    height: 150,
-    marginBottom: 20,
-  },
   container: {
     flex: 1,
     padding: 10,
@@ -234,11 +215,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  boxTitle: {
+    flex: 1,
+    color: 'white',
+    textAlign: 'center', 
+    fontWeight: 'bold',
+    fontSize: 28,
+  },
+  boxSubTitle: {
+    flex: 1,
+    color: 'white',
+    textAlign: 'center', 
+    fontWeight: 'bold',
+    fontSize: 12,
+    marginBottom: 20,
+  },
+  boxText: {
+    color: 'white',
+  },
   box: {
     flex: 1,
     width: '80%',
-    backgroundColor: '#000',
+    backgroundColor: '#256d7b',
+    color: 'black',
     marginBottom: 30,
+    borderRadius: 10,
+    padding: 10,
   },
   button: {
     flexDirection: 'row', 
@@ -271,7 +273,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center', 
     fontWeight: 'bold',
-    fontSize: 28,
+    fontSize: 30,
     flex: 1,
     padding: 10,
     marginTop: 40,
@@ -280,7 +282,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center', 
     fontWeight: 'bold',
-    fontSize: 15,
+    fontSize: 20,
     flex: 1,
     padding: 10,
   },
@@ -291,6 +293,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#fff',
     color: '#fff'
+  },
+  inputStyle: {
+    borderWidth: 1,
+    color: '#fff',
+    borderColor: '#4e4e4e',
+    padding: 12,
+    marginBottom: 15,
+  },
+  inputMsg: {
+    borderWidth: 1,
+    color: '#fff',
+    borderColor: '#4e4e4e',
+    padding: 12,
+    height: 150,
+    marginBottom: 20,
   },
   scrollView: {
     width: Dimensions.get('window').width

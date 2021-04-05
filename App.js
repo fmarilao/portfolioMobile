@@ -40,6 +40,16 @@ export default function App() {
       })
   }
 
+  const skills = () => {
+    return info.resume.skills.map((element, i) => {
+      return(
+        <View key={i} style={styles.container}>
+          <Text style={styles.subTitles}>🔹  {element.name}  🔹</Text>
+        </View>
+        )
+    })
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -57,6 +67,8 @@ export default function App() {
       <Button title="Spanish Resume" onPress={() => loadInBrowser(info.main.resumeSpanishdownload)}></Button>
       <Text style={styles.titles}>Latest Projects</Text>
       <View style={styles.container}>{projects()}</View>
+      <Text style={styles.titles}>Skills</Text>
+      <View style={styles.container}>{skills()}</View>
       </ScrollView>
       <StatusBar style="auto" />
     </View>

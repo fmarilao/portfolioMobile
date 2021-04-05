@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Button, Dimensions, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Button } from 'react-native-elements';
+import { Dimensions, Linking, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
 
 
 export default function App() {
@@ -13,7 +14,6 @@ export default function App() {
       .then(data => {
         setInfo(data)
         setLoading(false)
-        console.log(data.portfolio.projects)
       })
     // eslint-disable-next-line
   }, []);
@@ -22,12 +22,19 @@ export default function App() {
     return <View><Text>Cargando...</Text></View>
   }
 
+  const loadInBrowser = (url) => {
+    Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
+  };
+
   const projects = () => {
     return info.portfolio.projects.map((element, i) => {
       return(
-      <View key={element.i}>
+      <View key={i}>
         <Text style={styles.text}>{element.title}</Text>
-        <Text style={styles.text}>{element.url}</Text>
+        <Image source={{uri: `http://fmarilao.tech/images/portfolio/${element.image}`}}
+               style={{width: 200, height: 200}}
+        />
+        <Button style={styles.text} title={element.url} onPress={() => loadInBrowser(element.url)}></Button>
       </View>
       )
       })
@@ -38,16 +45,16 @@ export default function App() {
       <ScrollView>
       <Text style={styles.text}>{info.main.name}</Text>
       <Text style={styles.text}>{info.main.description}</Text>
-      <Button title="LinkedIn"></Button>
-      <Button title="Github"></Button>
+      <Button type="clear" title="LinkedIn" onPress={() => loadInBrowser(info.main.project)}></Button>
+      <Button type="clear" title="Github" onPress={() => loadInBrowser(info.main.github)}></Button>
       <Text style={styles.text}>{info.main.bio}</Text>
       <Text style={styles.titles}>{info.main.contactmessage}</Text>
       <Text style={styles.text}>🇦🇷 {info.main.address.street}</Text>
       <Text style={styles.text}>{info.main.address.city}</Text>
       <Text style={styles.text}>{info.main.phone}</Text>
       <Text style={styles.text}>{info.main.email}</Text>
-      <Button title="English Resume"></Button>
-      <Button title="Spanish Resume"></Button>
+      <Button title="English Resume" onPress={() => loadInBrowser(info.main.resumedownload)}></Button>
+      <Button title="Spanish Resume" onPress={() => loadInBrowser(info.main.resumeSpanishdownload)}></Button>
       <Text style={styles.titles}>Latest Projects</Text>
       <View>{projects()}</View>
       </ScrollView>

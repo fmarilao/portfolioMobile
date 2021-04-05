@@ -63,7 +63,7 @@ export default function App() {
   const education = () => {
     return info.resume.education.map((element, i) => {
       return(
-        <View key={i} style={styles.container}>
+        <View key={i} style={styles.box}>
           <Text style={styles.subTitles}>{element.school}</Text>
           <Text style={styles.text}>{element.degree}</Text>
           <Text style={styles.text}>{element.graduated}</Text>
@@ -76,7 +76,7 @@ export default function App() {
   const work = () => {
     return info.resume.work.map((element, i) => {
       return(
-        <View key={i} style={styles.container}>
+        <View key={i} style={styles.box}>
           <Text style={styles.subTitles}>{element.company}</Text>
           <Text style={styles.text}>{element.title}</Text>
           <Text style={styles.text}>{element.years}</Text>
@@ -144,6 +144,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  box: {
+    flex: 1,
+    width: '80%',
+    backgroundColor: '#000',
+    marginBottom: 30,
+  },
   button: {
     flexDirection: 'row', 
     height: 50, 
@@ -162,6 +168,7 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
+    alignItems: 'flex-start',
     textAlign: 'center',
     padding: 10,
     color: '#fff',

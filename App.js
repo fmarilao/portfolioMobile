@@ -60,6 +60,19 @@ export default function App() {
     })
   }
 
+  const education = () => {
+    return info.resume.education.map((element, i) => {
+      return(
+        <View key={i} style={styles.container}>
+          <Text style={styles.subTitles}>{element.school}</Text>
+          <Text style={styles.text}>{element.degree}</Text>
+          <Text style={styles.text}>{element.graduated}</Text>
+          <Text style={styles.text}>{element.description}</Text>
+        </View>
+        )
+    })
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -91,10 +104,16 @@ export default function App() {
       </View>
       <Text style={styles.titles}>Latest Projects</Text>
       <View style={styles.container}>{projects()}</View>
+
       <Text style={styles.titles}>Skills</Text>
       <View style={styles.container}>{skills()}</View>
+
       <Text style={styles.titles}>Soft Skills</Text>
       <View style={styles.container}>{softSkills()}</View>
+
+      <Text style={styles.titles}>Education</Text>
+      <View style={styles.container}>{education()}</View>
+
       </ScrollView>
       <StatusBar style="auto" />
     </View>

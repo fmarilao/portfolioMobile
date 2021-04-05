@@ -26,6 +26,7 @@ export default function App() {
     Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
   };
 
+
   const projects = () => {
     return info.portfolio.projects.map((element, i) => {
       return(
@@ -105,16 +106,18 @@ export default function App() {
         nPress={() => loadInBrowser(info.main.github)}
       />
       </View>
+      {/* Contact Info */}
       <Text style={styles.text}>{info.main.bio}</Text>
       <Text style={styles.titles}>{info.main.contactmessage}</Text>
       <Text style={styles.text}>🇦🇷 {info.main.address.street}</Text>
-      <Text style={styles.text}>{info.main.address.city}</Text>
+      <Text style={styles.text}>{info.main.address.city} {info.main.address.state}, {info.main.address.zip}</Text>
       <Text style={styles.text}>{info.main.phone}</Text>
-      <Text style={styles.text}>{info.main.email}</Text>
+      <Button type="clear" title={info.main.email} onPress={() => Linking.openURL(`mailto:${info.main.email}`)}></Button>
       <View style={styles.button}>
       <Button title="English Resume" onPress={() => loadInBrowser(info.main.resumedownload)}></Button>
       <Button title="Spanish Resume" onPress={() => loadInBrowser(info.main.resumeSpanishdownload)}></Button>
       </View>
+
       <Text style={styles.titles}>Latest Projects</Text>
       <View style={styles.container}>{projects()}</View>
 
@@ -131,7 +134,6 @@ export default function App() {
       <View style={styles.container}>{work()}</View>
 
       </ScrollView>
-      <StatusBar style="auto" />
     </View>
   );
 }
@@ -157,6 +159,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginTop: 20,
     paddingLeft: 10,
+    textDecorationLine: "underline"
   }, 
   socialButton: {
     flexDirection: 'row', 

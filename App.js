@@ -141,6 +141,7 @@ export default function App() {
           message: '' 
         }}
         onSubmit={(values, {resetForm}) => {
+          // Pending function to send email
           Alert.alert(JSON.stringify(values))
           resetForm();
         }}

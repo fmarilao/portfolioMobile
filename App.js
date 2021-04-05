@@ -2,42 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { Button, SocialIcon } from 'react-native-elements';
 import { Alert, Dimensions, TextInput, Linking, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
-import { useFormik } from 'formik'
-import * as Yup from 'yup'
-
-const validationSchema = Yup.object({
-  name: Yup
-  .string("Insert your name")
-  .min(1, "Too short")
-  .max(30, "Too long (max 30 chars")
-  .required("The name is required"),
-  email: Yup
-  .string("email")
-  .email("invalid email address")
-  .required("email is required"),
-  message: Yup
-  .string("Insert your message")
-  .min(1, "Too short")
-  .max(3000, "Too long (max 3000 chars")
-  .required("The name is required"),
-})
-
+import { Formik, useFormik } from 'formik'
+import * as yup from 'yup'
 
 export default function App() {
   const [info, setInfo] = useState({})
   const [loading, setLoading] = useState(true)
-
-  const formik = useFormik({
-    initialValues: {
-      name: '',
-      email: '',
-      message: '',
-    },
-    validationSchema: validationSchema,
-    onSubmit: (x) => {
-      console.warn(x)
-    }
-  })
 
   useEffect(() => {
     fetch('http://fmarilao.tech/resumeData.json')
@@ -166,34 +136,97 @@ export default function App() {
       <View style={styles.container}>{work()}</View>
 
       <Text style={styles.titles}>Get in touch</Text>
-      <View style={styles.container}>
-        <Text style={styles.subTitles}>Your name</Text>
-        <TextInput
-          onChangeText={formik.handleChange('name')} 
-          value={formik.values.name}
-          style={styles.input}
-          />
-        <Text style={styles.subTitles}>Your email</Text>
-        <TextInput
-          onChangeText={formik.handleChange('email')} 
-          value={formik.values.email}
-          style={styles.input}
-          />
-        <Text style={styles.subTitles}>Your message</Text>
-        <TextInput
-          onChangeText={formik.handleChange('message')} 
-          value={formik.values.message}
-          style={styles.input}
-          />
-        <Button title="Send" onPress={formik.handleSubmit}></Button>
-        </View>
 
+      <Formik
+        initialValues={{ 
+          name: '',
+          email: '', 
+          message: '' 
+        }}
+        onSubmit={(values, {resetForm}) => {
+          Alert.alert(JSON.stringify(values))
+          resetForm();
+        }}
+        validationSchema={yup.object().shape({
+          name: yup
+            .string()
+            .required('Please, provide your name!'),
+          email: yup
+            .string()
+            .email()
+            .required(),
+          message: yup
+            .string()
+            .min(4)
+            .max(3000, 'Min 4 max 3000 chars.')
+            .required(),
+        })}
+       >
+        {({ values, handleChange, errors, setFieldTouched, touched, isValid, handleSubmit }) => (
+          <View style={styles.formContainer}>
+          <TextInput
+            value={values.name}
+            style={styles.inputStyle}
+            onChangeText={handleChange('name')}
+            onBlur={() => setFieldTouched('name')}
+            placeholder="Name"
+            placeholderTextColor="#fff"
+          />
+          {touched.name && errors.name &&
+            <Text style={{ fontSize: 12, color: '#FF0D10' }}>{errors.name}</Text>
+          }            
+          <TextInput
+            value={values.email}
+            style={styles.inputStyle}
+            onChangeText={handleChange('email')}
+            onBlur={() => setFieldTouched('email')}
+            placeholder="E-mail"
+            placeholderTextColor="#fff" 
+          />
+          {touched.email && errors.email &&
+            <Text style={{ fontSize: 12, color: '#FF0D10' }}>{errors.email}</Text>
+          }
+          <TextInput
+            value={values.message}
+            style={styles.inputMsg}
+            onChangeText={handleChange('message')}
+            placeholder="Message"
+            placeholderTextColor="#fff"
+            onBlur={() => setFieldTouched('message')}
+          />
+          {touched.message && errors.message &&
+            <Text style={{ fontSize: 12, color: '#FF0D10' }}>{errors.message}</Text>
+          }
+          <Button
+            color="#3740FE"
+            title='Submit'
+            disabled={!isValid}
+            onPress={handleSubmit}
+          />
+        </View>
+      )}
+    </Formik>
       </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  inputStyle: {
+    borderWidth: 1,
+    color: '#fff',
+    borderColor: '#4e4e4e',
+    padding: 12,
+    marginBottom: 15,
+  },
+  inputMsg: {
+    borderWidth: 1,
+    color: '#fff',
+    borderColor: '#4e4e4e',
+    padding: 12,
+    height: 150,
+    marginBottom: 20,
+  },
   container: {
     flex: 1,
     padding: 10,
@@ -223,6 +256,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 30,
     paddingLeft: 10,
+  },
+  formContainer: {
+    padding: 50 
   },
   text: {
     flex: 1,

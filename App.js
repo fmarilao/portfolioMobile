@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Button } from 'react-native-elements';
+import { Button, SocialIcon } from 'react-native-elements';
 import { Dimensions, Linking, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
 
 
@@ -50,25 +50,51 @@ export default function App() {
     })
   }
 
+  const softSkills = () => {
+    return info.resume.softSkills.map((element, i) => {
+      return(
+        <View key={i} style={styles.container}>
+          <Text style={styles.subTitles}>🔹  {element.name}  🔹</Text>
+        </View>
+        )
+    })
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView>
       <Text style={styles.titles}>{info.main.name}</Text>
       <Text style={styles.subTitles}>{info.main.description}</Text>
-      <Button type="clear" title="LinkedIn" onPress={() => loadInBrowser(info.main.project)}></Button>
-      <Button type="clear" title="Github" onPress={() => loadInBrowser(info.main.github)}></Button>
+      <View style={styles.socialButton}>
+      <SocialIcon
+        light
+        iconSize={30}
+        type='linkedin'
+        onPress={() => loadInBrowser(info.main.project)}
+      />
+      <SocialIcon
+        light
+        iconSize={30}
+        type='github'
+        nPress={() => loadInBrowser(info.main.github)}
+      />
+      </View>
       <Text style={styles.text}>{info.main.bio}</Text>
       <Text style={styles.titles}>{info.main.contactmessage}</Text>
       <Text style={styles.text}>🇦🇷 {info.main.address.street}</Text>
       <Text style={styles.text}>{info.main.address.city}</Text>
       <Text style={styles.text}>{info.main.phone}</Text>
       <Text style={styles.text}>{info.main.email}</Text>
+      <View style={styles.button}>
       <Button title="English Resume" onPress={() => loadInBrowser(info.main.resumedownload)}></Button>
       <Button title="Spanish Resume" onPress={() => loadInBrowser(info.main.resumeSpanishdownload)}></Button>
+      </View>
       <Text style={styles.titles}>Latest Projects</Text>
       <View style={styles.container}>{projects()}</View>
       <Text style={styles.titles}>Skills</Text>
       <View style={styles.container}>{skills()}</View>
+      <Text style={styles.titles}>Soft Skills</Text>
+      <View style={styles.container}>{softSkills()}</View>
       </ScrollView>
       <StatusBar style="auto" />
     </View>
@@ -78,10 +104,26 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 10,
     backgroundColor: '#000',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  button: {
+    flexDirection: 'row', 
+    height: 50, 
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    marginTop: 20,
+    paddingLeft: 10,
+  }, 
+  socialButton: {
+    flexDirection: 'row', 
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 30,
+    paddingLeft: 10,
   },
   text: {
     flex: 1,
@@ -96,13 +138,13 @@ const styles = StyleSheet.create({
     fontSize: 28,
     flex: 1,
     padding: 10,
-    marginTop: 30,
+    marginTop: 40,
   },
   subTitles: {
     color: '#fff',
     textAlign: 'center', 
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 15,
     flex: 1,
     padding: 10,
   },

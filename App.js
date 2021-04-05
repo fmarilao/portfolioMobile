@@ -1,8 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { Button, SocialIcon } from 'react-native-elements';
-import { Dimensions, TextInput, Linking, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
+import { Alert, Dimensions, TextInput, Linking, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
 import { useFormik } from 'formik'
+import * as Yup from 'yup'
+
+const validationSchema = Yup.object({
+  name: Yup
+  .string("Insert your name")
+  .min(1, "Too short")
+  .max(30, "Too long (max 30 chars")
+  .required("The name is required"),
+  email: Yup
+  .string("email")
+  .email("invalid email address")
+  .required("email is required"),
+  message: Yup
+  .string("Insert your message")
+  .min(1, "Too short")
+  .max(3000, "Too long (max 3000 chars")
+  .required("The name is required"),
+})
+
 
 export default function App() {
   const [info, setInfo] = useState({})
@@ -14,7 +33,10 @@ export default function App() {
       email: '',
       message: '',
     },
-    onSubmit: x => console.warn(x)
+    validationSchema: validationSchema,
+    onSubmit: (x) => {
+      console.warn(x)
+    }
   })
 
   useEffect(() => {
@@ -127,6 +149,7 @@ export default function App() {
       <Button title="Spanish Resume" onPress={() => loadInBrowser(info.main.resumeSpanishdownload)}></Button>
       </View>
 
+
       <Text style={styles.titles}>Latest Projects</Text>
       <View style={styles.container}>{projects()}</View>
 
@@ -230,7 +253,8 @@ const styles = StyleSheet.create({
     width: '80%',
     margin: 10,
     borderWidth: 1,
-    borderColor: '#fff'
+    borderColor: '#fff',
+    color: '#fff'
   },
   scrollView: {
     width: Dimensions.get('window').width

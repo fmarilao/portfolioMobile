@@ -29,12 +29,12 @@ export default function App() {
   const projects = () => {
     return info.portfolio.projects.map((element, i) => {
       return(
-      <View key={i}>
-        <Text style={styles.text}>{element.title}</Text>
+      <View key={i} style={styles.container}>
+        <Text style={styles.subTitles}>{element.title}</Text>
         <Image source={{uri: `http://fmarilao.tech/images/portfolio/${element.image}`}}
                style={{width: 200, height: 200}}
         />
-        <Button style={styles.text} title={element.url} onPress={() => loadInBrowser(element.url)}></Button>
+        <Button type="clear" style={styles.text} title={element.url} onPress={() => loadInBrowser(element.url)}></Button>
       </View>
       )
       })
@@ -43,8 +43,8 @@ export default function App() {
   return (
     <View style={styles.container}>
       <ScrollView>
-      <Text style={styles.text}>{info.main.name}</Text>
-      <Text style={styles.text}>{info.main.description}</Text>
+      <Text style={styles.titles}>{info.main.name}</Text>
+      <Text style={styles.subTitles}>{info.main.description}</Text>
       <Button type="clear" title="LinkedIn" onPress={() => loadInBrowser(info.main.project)}></Button>
       <Button type="clear" title="Github" onPress={() => loadInBrowser(info.main.github)}></Button>
       <Text style={styles.text}>{info.main.bio}</Text>
@@ -56,7 +56,7 @@ export default function App() {
       <Button title="English Resume" onPress={() => loadInBrowser(info.main.resumedownload)}></Button>
       <Button title="Spanish Resume" onPress={() => loadInBrowser(info.main.resumeSpanishdownload)}></Button>
       <Text style={styles.titles}>Latest Projects</Text>
-      <View>{projects()}</View>
+      <View style={styles.container}>{projects()}</View>
       </ScrollView>
       <StatusBar style="auto" />
     </View>
@@ -66,27 +66,35 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20,
     backgroundColor: '#000',
     alignItems: 'center',
     justifyContent: 'center',
   },
   text: {
     flex: 1,
+    textAlign: 'center',
     padding: 10,
     color: '#fff',
   },
   titles: {
     color: '#fff',
+    textAlign: 'center', 
+    fontWeight: 'bold',
+    fontSize: 28,
+    flex: 1,
+    padding: 10,
+    marginTop: 30,
+  },
+  subTitles: {
+    color: '#fff',
+    textAlign: 'center', 
+    fontWeight: 'bold',
+    fontSize: 18,
     flex: 1,
     padding: 10,
   },
   scrollView: {
     width: Dimensions.get('window').width
   },
-  view: {
-    height: 40,
-    width: 300,
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
 });

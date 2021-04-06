@@ -3,10 +3,12 @@ import { Button, SocialIcon } from 'react-native-elements';
 import { StatusBar, Alert, Dimensions, TextInput, Linking, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
 import { Formik } from 'formik'
 import * as yup from 'yup'
+import email from 'react-native-email'
 
 export default function App() {
   const [info, setInfo] = useState({})
   const [loading, setLoading] = useState(true)
+  const [emailData, setEmailData] = useState({})
 
   useEffect(() => {
     fetch('http://fmarilao.tech/resumeData.json')
@@ -25,13 +27,20 @@ export default function App() {
     Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
   };
 
+  const handleEmail = () => {
+    const to = [info.main.email]
+    email(to, {
+      body: `${emailData.message}`
+    })
+  }
+
   const projects = () => {
     return info.portfolio.projects.map((element, i) => {
       return(
       <View key={i} style={styles.container}>
         <Text style={styles.subTitles}>{element.title}</Text>
-        <Image source={{uri: `http://fmarilao.tech/images/portfolio/${element.image}`}}
-               style={{width: 200, height: 200}}
+        <Image source={{uri: `http://fmarilao.tech/images/portfolio/${element.image}?time=${Date.now()}`}}
+               style={{width: 300, height: 230}}
         />
         <Button type="clear" style={styles.text} title={element.url} onPress={() => loadInBrowser(element.url)}></Button>
       </View>
@@ -137,22 +146,18 @@ export default function App() {
       <Formik
         initialValues={{ 
           name: '',
-          email: '', 
           message: '' 
         }}
         onSubmit={(values, {resetForm}) => {
           // Pending function to send email
-          Alert.alert(JSON.stringify(values))
+          setEmailData(values)
           resetForm();
+          handleEmail();
         }}
         validationSchema={yup.object().shape({
           name: yup
             .string()
             .required('Please, provide your name!'),
-          email: yup
-            .string()
-            .email()
-            .required(),
           message: yup
             .string()
             .min(4)
@@ -173,17 +178,6 @@ export default function App() {
           {touched.name && errors.name &&
             <Text style={{ fontSize: 12, color: '#FF0D10' }}>{errors.name}</Text>
           }            
-          <TextInput
-            value={values.email}
-            style={styles.inputStyle}
-            onChangeText={handleChange('email')}
-            onBlur={() => setFieldTouched('email')}
-            placeholder="E-mail"
-            placeholderTextColor="#fff" 
-          />
-          {touched.email && errors.email &&
-            <Text style={{ fontSize: 12, color: '#FF0D10' }}>{errors.email}</Text>
-          }
           <TextInput
             value={values.message}
             style={styles.inputMsg}

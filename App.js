@@ -8,7 +8,6 @@ import email from 'react-native-email'
 export default function App() {
   const [info, setInfo] = useState({})
   const [loading, setLoading] = useState(true)
-  const [emailData, setEmailData] = useState({})
 
   useEffect(() => {
     fetch('http://fmarilao.tech/resumeData.json')
@@ -27,10 +26,10 @@ export default function App() {
     Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
   };
 
-  const handleEmail = () => {
+  const handleEmail = (values) => {
     const to = [info.main.email]
     email(to, {
-      body: `${emailData.message}`
+      body: `${values.message}`
     })
   }
 
@@ -111,7 +110,7 @@ export default function App() {
         light
         iconSize={30}
         type='github'
-        nPress={() => loadInBrowser(info.main.github)}
+        onPress={() => loadInBrowser(info.main.github)}
       />
       </View>
       {/* Contact Info */}
@@ -149,10 +148,8 @@ export default function App() {
           message: '' 
         }}
         onSubmit={(values, {resetForm}) => {
-          // Pending function to send email
-          setEmailData(values)
+          handleEmail(values);
           resetForm();
-          handleEmail();
         }}
         validationSchema={yup.object().shape({
           name: yup
